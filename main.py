@@ -1,3 +1,4 @@
+import argparse
 import openpyxl
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Font, Alignment, Border, Side
@@ -244,9 +245,19 @@ def write_to_excel(file_path, trial_balance_df, general_ledger_df):
 
 
 def main():
-    file_path = '簡単仕訳帳2026.xlsx'
+    parser = argparse.ArgumentParser(
+        description='仕訳帳から月別残高試算表と総勘定元帳を生成します'
+    )
+    parser.add_argument(
+        'file',
+        nargs='?',
+        default='簡単仕訳帳2026.xlsx',
+        help='仕訳帳のExcelファイルパス（デフォルト: 簡単仕訳帳2026.xlsx）'
+    )
+    args = parser.parse_args()
+    file_path = args.file
 
-    print("仕訳帳データを読み込み中...")
+    print(f"仕訳帳データを読み込み中: {file_path}")
     df = load_journal_data(file_path)
     print(f"読み込み完了: {len(df)} 件の仕訳")
 
