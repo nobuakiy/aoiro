@@ -7,11 +7,23 @@ from collections import defaultdict
 from datetime import datetime
 
 
-def load_journal_data(file_path, sheet_name='仕訳帳 ', start_row=5, end_row=309):
+def load_journal_data(file_path, start_row=5, end_row=309):
     """
     仕訳帳データを読み込む
     """
     wb = openpyxl.load_workbook(file_path, data_only=True)
+
+    # 「仕訳帳」で始まるシートを探す
+    sheet_name = None
+    for name in wb.sheetnames:
+        if name.startswith('仕訳帳'):
+            sheet_name = name
+            break
+
+    if sheet_name is None:
+        raise ValueError("「仕訳帳」で始まるシートが見つかりません")
+
+    print(f"シート '{sheet_name}' を読み込みます")
 
     # 科目コード表を読み込む
     code_sheet = wb['科目コード表']
