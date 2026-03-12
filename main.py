@@ -216,6 +216,12 @@ def write_to_excel(file_path, trial_balance_df, general_ledger_df):
         cell.font = Font(bold=True)  # type: ignore
         cell.alignment = Alignment(horizontal='center')  # type: ignore
 
+    # 金額欄に桁区切りカンマを適用（月別残高試算表）
+    for row in ws_trial.iter_rows(min_row=2, min_col=3, max_col=5):  # type: ignore
+        for cell in row:
+            if cell.value is not None and isinstance(cell.value, (int, float)):
+                cell.number_format = '#,##0'  # type: ignore
+
     # 総勘定元帳シートを作成
     if '総勘定元帳' in wb.sheetnames:
         del wb['総勘定元帳']
@@ -233,6 +239,12 @@ def write_to_excel(file_path, trial_balance_df, general_ledger_df):
     for cell in ws_ledger[1]:  # type: ignore
         cell.font = Font(bold=True)  # type: ignore
         cell.alignment = Alignment(horizontal='center')  # type: ignore
+
+    # 金額欄に桁区切りカンマを適用（総勘定元帳）
+    for row in ws_ledger.iter_rows(min_row=2, min_col=5, max_col=7):  # type: ignore
+        for cell in row:
+            if cell.value is not None and isinstance(cell.value, (int, float)):
+                cell.number_format = '#,##0'  # type: ignore
 
     # 列幅を調整
     ws_trial.column_dimensions['A'].width = 8  # type: ignore
